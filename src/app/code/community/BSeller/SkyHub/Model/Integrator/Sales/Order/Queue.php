@@ -14,6 +14,7 @@
 
 class BSeller_SkyHub_Model_Integrator_Sales_Order_Queue extends BSeller_SkyHub_Model_Integrator_Abstract
 {
+    use BSeller_SkyHub_Trait_Sales_Order;
 
     /**
      * @return array|bool
@@ -46,11 +47,13 @@ class BSeller_SkyHub_Model_Integrator_Sales_Order_Queue extends BSeller_SkyHub_M
      */
     public function deleteByOrder(Mage_Sales_Model_Order $order)
     {
-        if (!$order->getIncrementId()) {
+        $orderSkyhubCode = $this->getOrderIncrementId($order->getId());
+
+        if (!$orderSkyhubCode) {
             return false;
         }
 
-        return $this->delete($order->getIncrementId());
+        return $this->delete($orderSkyhubCode);
     }
 
 

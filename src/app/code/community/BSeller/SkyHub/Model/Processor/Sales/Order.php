@@ -59,6 +59,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
         $code        = $this->arrayExtract($data, 'code');
         $channel     = $this->arrayExtract($data, 'channel');
         $orderId = $this->getOrderId($code);
+        $status     = $this->arrayExtract($data, 'status/type');
 
         if ($orderId) {
             /**
@@ -71,6 +72,11 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
         }
 
         $this->simulateStore($this->getStore());
+
+        if ($status == "CANCELED") {
+            Mage::getSingleton('bseller_skyhub/integrator_sales_order_queue')->delete($code);
+            Mage::throwException($this->__('This order is canceled in the queue.'));
+        }
 
         $billingAddress  = new Varien_Object($this->arrayExtract($data, 'billing_address'));
         $shippingAddress = new Varien_Object($this->arrayExtract($data, 'shipping_address'));
