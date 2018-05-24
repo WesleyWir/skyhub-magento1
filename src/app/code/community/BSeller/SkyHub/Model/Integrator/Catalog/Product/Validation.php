@@ -61,13 +61,6 @@ trait BSeller_SkyHub_Model_Integrator_Catalog_Product_Validation
             return false;
         }
 
-        /**
-        switch ($this->getCatalogProductIntegrationMethod()) {
-            case BSeller_SkyHub_Model_System_Config_Source_Integration_Method::INTEGRATION_METHOD_QUEUE:
-                return false;
-        }
-        **/
-        
         return true;
     }
     

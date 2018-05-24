@@ -15,12 +15,23 @@
 class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model_Observer_Abstract
 {
 
-    use BSeller_SkyHub_Model_Integrator_Catalog_Product_Validation;
+    use BSeller_SkyHub_Model_Integrator_Catalog_Product_Validation,
+        BSeller_SkyHub_Trait_Queue;
     
     /**
      * @param Varien_Event_Observer $observer
      */
     public function integrateProduct(Varien_Event_Observer $observer)
+    {
+        $this->processStoreIteration($this, 'prepareIntegrationProduct', $observer);
+    }
+
+    /**
+     * @param Varien_Event_Observer $observer
+     *
+     * @param Mage_Core_Model_Store $store
+     */
+    public function prepareIntegrationProduct(Varien_Event_Observer $observer)
     {
         if (!$this->canRun()) {
             return;
@@ -28,6 +39,20 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
 
         /** @var Mage_Catalog_Model_Product $product */
         $product = $observer->getData('product');
+        $this->processIntegrationProduct($product);
+    }
+
+    /**
+     * @param Mage_Catalog_Model_Product $product
+     * @param bool $forceQueue
+     * @return void
+     */
+    protected function processIntegrationProduct(Mage_Catalog_Model_Product $product, $forceQueue = false)
+    {
+        $parentIds = Mage::getModel('catalog/product_type_configurable')->getParentIdsByChild($product->getId());
+        foreach ($parentIds as $id) {
+            $this->processIntegrationProduct(Mage::getModel('catalog/product')->load($id), true);
+        }
 
         if (!$this->canIntegrateProduct($product)) {
             return;
@@ -37,9 +62,25 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
             /** Create or Update Product */
             $this->catalogProductIntegrator()->createOrUpdate($product);
         }
-    }
 
-    protected function hasStockOrPriceUpdate($product)
+        if ($forceQueue) {
+            $this->getQueueResource()
+                ->queue(
+                    $product->getId(),
+                    BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT,
+                    BSeller_SkyHub_Model_Queue::PROCESS_TYPE_EXPORT
+                );
+        }
+    }
+    
+    /**
+     * @param Mage_Catalog_Model_Product $product
+     *
+     * @return bool
+     *
+     * @throws Varien_Exception
+     */
+    protected function hasStockOrPriceUpdate(Mage_Catalog_Model_Product $product)
     {
         if ($product->getOrigData('price') != $product->getData('price')) {
             return true;
