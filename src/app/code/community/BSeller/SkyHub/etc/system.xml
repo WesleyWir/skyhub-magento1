@@ -476,6 +476,18 @@
                                 <enabled>1</enabled>
                             </depends>
                         </queue_execute>
+                        <order_expiration>
+                            <label>Order expiration (in days)</label>
+                            <sort_order>60</sort_order>
+                            <frontend_type>text</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[The number (in days) to consider order expirated.]]></comment>
+                            <depends>
+                                <enabled>1</enabled>
+                            </depends>
+                        </order_expiration>
                     </fields>
                 </cron_sales_order_status>
                 <!-- SALES ORDER QUEUE -->

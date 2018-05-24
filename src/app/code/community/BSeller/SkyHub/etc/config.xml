@@ -399,7 +399,7 @@
             </general>
             <customer>
                 <allow_customer_email_creation_with_taxvat>1</allow_customer_email_creation_with_taxvat>
-                <customer_email_creation_with_taxvat_pattern>@skuhub.com.br</customer_email_creation_with_taxvat_pattern>
+                <customer_email_creation_with_taxvat_pattern>@skyhub.com.br</customer_email_creation_with_taxvat_pattern>
             </customer>
             <log>
                 <enabled>1</enabled>
@@ -444,6 +444,7 @@
                 <enabled>1</enabled>
                 <queue_create>*/10 * * * *</queue_create>
                 <queue_execute>*/10 * * * *</queue_execute>
+                <order_expiration>30</order_expiration>
             </cron_sales_order_status>
             <cron_sales_order_queue>
                 <!-- SALES ORDER QUEUE -->

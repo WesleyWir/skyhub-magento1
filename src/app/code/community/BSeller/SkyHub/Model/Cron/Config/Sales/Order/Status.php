@@ -17,4 +17,8 @@ class BSeller_SkyHub_Model_Cron_Config_Sales_Order_Status extends BSeller_SkyHub
 
     protected $group = 'cron_sales_order_status';
 
+    public function orderExpirationDays()
+    {
+        return (int)$this->getGroupConfig('order_expiration');
+    }
 }
