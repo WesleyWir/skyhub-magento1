@@ -39,21 +39,19 @@ class BSeller_SkyHub_Model_Cron_Queue_Sales_Order_Queue extends BSeller_SkyHub_M
                 break;
             }
 
-            try {
-                /** @var Mage_Sales_Model_Order $order */
-                $order = $this->salesOrderProcessor()->createOrder($orderData);
-            } catch (Exception $e) {
-                /** The log is already created in the createOrder method. */
+            /** @var Mage_Sales_Model_Order $order */
+            $order = $this->salesOrderProcessor()->createOrder($orderData);
+            if (!$order || !$order->getId()) {
+                $message = $schedule->getMessages();
+                $message .= $this->__('Order cannot be created.', $this->salesOrderProcessor()->arrayExtract($orderData, 'code'));
+                $schedule->setMessages($message);
                 continue;
             }
 
-            if (!$order || !$order->getId()) {
-                $schedule->setMessages($this->__('Order cannot be created.'));
-                return;
-            }
-
-            $message  = $schedule->getMessages();
-            $message .= $this->__('Order %s successfully created.', $order->getIncrementId());
+            $message = $schedule->getMessages();
+            $message .= $this->__(
+                'Order %s successfully created.', $order->getIncrementId()
+            );
 
             /** @var \SkyHub\Api\Handler\Response\HandlerDefault $isDeleted */
             $isDeleted = $this->orderQueueIntegrator()->deleteByOrder($order);
