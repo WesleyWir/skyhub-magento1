@@ -23,16 +23,6 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
      */
     public function integrateProduct(Varien_Event_Observer $observer)
     {
-        $this->processStoreIteration($this, 'prepareIntegrationProduct', $observer);
-    }
-
-    /**
-     * @param Varien_Event_Observer $observer
-     *
-     * @param Mage_Core_Model_Store $store
-     */
-    public function prepareIntegrationProduct(Varien_Event_Observer $observer)
-    {
         if (!$this->canRun()) {
             return;
         }
