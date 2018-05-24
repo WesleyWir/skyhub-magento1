@@ -3,6 +3,17 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.2.7] - 2018-05-24
+### Added
+- Solved problem with order statuses queue which wasn't decreasing magento queue;
+- Solved problem with order consuming which wasn't decreasing skyhub queue;
+- Solved problem with orders created with the option to create with default magento increment_id which wasn't beeing deleted from skyhub;
+- Solved problem with canceled orders at skyhub which wasn't beeing deleted but magento wasn't cleaning skyhub queue;
+- Solved problem with configurable products sons which wasn't being updated at skyhub by integration;
+
+### Changed
+- Minor fixes.
+
 ## [1.2.6] - 2018-05-17
 ### Added
 - Added a script file to execute all integrations (line creation and execution).
