@@ -16,6 +16,7 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
 {
 
     use BSeller_SkyHub_Model_Integrator_Catalog_Product_Validation,
+        BSeller_SkyHub_Trait_Entity,
         BSeller_SkyHub_Trait_Queue;
     
     /**
@@ -195,5 +196,29 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
     {
         $url = (string) $block->getUrl('*/*/integrate', ['product_id' => $block->getProductId()]);
         return $url;
+    }
+
+    /**
+     * @param Varien_Event_Observer $observer
+     */
+    public function productCommit(Varien_Event_Observer $observer)
+    {
+        $productId = $observer->getProduct()->getId();
+        $this->flagEntityIntegrate($productId);
+    }
+
+    /**
+     * @param Varien_Event_Observer $observer
+     */
+    public function catalogInventoryCommit(Varien_Event_Observer $observer)
+    {
+        $productId = $observer->getItem()->getProductId();
+        $this->flagEntityIntegrate($productId);
+    }
+
+    public function integrateProductForce(Varien_Event_Observer $observer)
+    {
+        $productId = $observer->getProductId();
+        $this->flagEntityIntegrate($productId);
     }
 }
