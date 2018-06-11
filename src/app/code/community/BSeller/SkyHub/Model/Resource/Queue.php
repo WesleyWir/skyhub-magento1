@@ -118,7 +118,7 @@ class BSeller_SkyHub_Model_Resource_Queue extends BSeller_Core_Model_Resource_Ab
         $select = $this->getReadConnection()
             ->select()
             ->from($this->getMainTable(), 'entity_id')
-            ->where('status IN (?)', implode(',', $integrableStatuses))
+            ->where('status IN (?)', $integrableStatuses)
             ->where('can_process = ?', 1)
             ->where('process_type = ?', (int) $processType)
             ->where('store_id IN (?)', $this->getStoreIds($storeId))
@@ -305,10 +305,11 @@ class BSeller_SkyHub_Model_Resource_Queue extends BSeller_Core_Model_Resource_Ab
     protected function getCondition(array $entityIds, $entityType, $storeId = 0)
     {
         $entityIds  = implode(',', $entityIds);
+        $storeIds   = implode(',', $this->getStoreIds($storeId));
         $conditions = [
             "entity_id IN ({$entityIds})",
             "entity_type = '{$entityType}'",
-            "store_id IN ({$this->getStoreIds($storeId)})"
+            "store_id IN ({$storeIds})"
         ];
 
         return new Zend_Db_Expr(implode(' AND ', $conditions));
@@ -318,7 +319,7 @@ class BSeller_SkyHub_Model_Resource_Queue extends BSeller_Core_Model_Resource_Ab
     /**
      * @param int $storeId
      *
-     * @return string
+     * @return array
      */
     protected function getStoreIds($storeId = 0)
     {
@@ -327,6 +328,6 @@ class BSeller_SkyHub_Model_Resource_Queue extends BSeller_Core_Model_Resource_Ab
         $storeIds = [0, $storeId];
         $storeIds = array_unique($storeIds);
 
-        return implode(',', $storeIds);
+        return $storeIds;
     }
 }
