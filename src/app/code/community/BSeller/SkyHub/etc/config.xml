@@ -248,6 +248,24 @@
                 <bseller_skyhub_interest>
                     <to_order>*</to_order>
                 </bseller_skyhub_interest>
+                <bseller_skyhub>
+                    <to_order>*</to_order>
+                </bseller_skyhub>
+                <bseller_skyhub_code>
+                    <to_order>*</to_order>
+                </bseller_skyhub_code>
+                <bseller_skyhub_channel>
+                    <to_order>*</to_order>
+                </bseller_skyhub_channel>
+                <bseller_skyhub_json>
+                    <to_order>*</to_order>
+                </bseller_skyhub_json>
+                <skyhub_code>
+                    <to_order>*</to_order>
+                </skyhub_code>
+                <skyhub_marketplace>
+                    <to_order>*</to_order>
+                </skyhub_marketplace>
             </sales_convert_quote>
             <sales_convert_order>
                 <bseller_skyhub_interest>

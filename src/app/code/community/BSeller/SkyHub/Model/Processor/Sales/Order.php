@@ -10,6 +10,7 @@
  * @copyright Copyright (c) 2018 B2W Digital - BSeller Platform. (http://www.bseller.com.br)
  *
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
+ * @author    Luiz Tucillo <luiz.tucillo@e-smart.com.br>
  */
 
 class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Processor_Abstract
@@ -107,6 +108,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
             ]
         );
 
+        //Bizcommerce_SkyHub module uses 'skyhub_code' and 'skyhub_marketplace' fields
         $creation->setOrderInfo($info)
             ->setCustomer($customer)
             ->setShippingMethod($shippingMethod, $shippingCarrier, (float) $shippingCost)
@@ -115,7 +117,17 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
             ->setInterestAmount($interestAmount)
             ->addOrderAddress('billing', $billingAddress)
             ->addOrderAddress('shipping', $shippingAddress)
-            ->setComment('This order was automatically created by SkyHub import process.');
+            ->setComment('This order was automatically created by SkyHub import process.')
+            ->setCustomData(
+                [
+                    'bseller_skyhub'            => true,
+                    'bseller_skyhub_code'       => $code,
+                    'bseller_skyhub_channel'    => $channel,
+                    'bseller_skyhub_json'       => Mage::helper('core')->jsonEncode($data),
+                    'skyhub_code'               => $code,
+                    'skyhub_marketplace'        => $channel
+                ]
+            );
 
         $products = $this->getProducts((array) $this->arrayExtract($data, 'items'));
         if (empty($products)) {
@@ -133,14 +145,6 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
         if (!$order) {
             return false;
         }
-
-        $order->setData('bseller_skyhub', true);
-        $order->setData('bseller_skyhub_code', $code);
-        $order->setData('bseller_skyhub_channel', $channel);
-
-        /** Bizcommerce_SkyHub uses these fields. */
-        $order->setData('skyhub_code', $code);
-        $order->setData('skyhub_marketplace', $channel);
 
         $order->getResource()->save($order);
 
