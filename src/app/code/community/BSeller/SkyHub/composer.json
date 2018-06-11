@@ -1,6 +1,6 @@
 {
     "require": {
-        "bittools/skyhub-php": "^1.0"
+        "bittools/skyhub-php": "^1.1.2"
     },
     "minimum-stability": "stable"
 }
