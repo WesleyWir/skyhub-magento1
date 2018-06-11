@@ -435,6 +435,8 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
                 'order'      => $order,
                 'order_data' => $orderData,
             ]);
+
+            $this->clearSessionQuote();
             
             Mage::unregister('rule_data');
         }
@@ -574,12 +576,25 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
                 return false;
             }
 
-            return $quote->delete();
+            $quote->delete();
+            $this->clearSessionQuote();
         } catch (Mage_Exception $e) {
             Mage::logException($e);
             return false;
         }
+
+        return true;
     }
+
+
+    /**
+     * Reset session quote data
+     */
+    public function clearSessionQuote()
+    {
+        $this->getSession()->clear();
+    }
+
     
     /**
      * @param array $data
