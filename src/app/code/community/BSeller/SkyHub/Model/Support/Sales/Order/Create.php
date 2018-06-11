@@ -435,8 +435,7 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
                 'order'      => $order,
                 'order_data' => $orderData,
             ]);
-    
-            $this->getSession()->clear();
+            
             Mage::unregister('rule_data');
         }
     
@@ -559,7 +558,28 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
         
         return $this;
     }
-    
+
+
+    /**
+     * Remove quote from session
+     *
+     * @return bool
+     */
+    public function removeSessionQuote()
+    {
+        try {
+            $quote = $this->getSession()->getQuote();
+
+            if (!$quote->getId()) {
+                return false;
+            }
+
+            return $quote->delete();
+        } catch (Mage_Exception $e) {
+            Mage::logException($e);
+            return false;
+        }
+    }
     
     /**
      * @param array $data

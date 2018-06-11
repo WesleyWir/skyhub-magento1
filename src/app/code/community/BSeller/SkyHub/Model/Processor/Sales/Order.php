@@ -9,8 +9,9 @@
  *
  * @copyright Copyright (c) 2018 B2W Digital - BSeller Platform. (http://www.bseller.com.br)
  *
- * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
+ * @author    Bruno Gemelli <bruno.gemelli@e-smart.com.br>
  * @author    Luiz Tucillo <luiz.tucillo@e-smart.com.br>
+ * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
  */
 
 class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Processor_Abstract
@@ -28,6 +29,9 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
             /** @var Mage_Sales_Model_Order $order */
             $order = $this->processOrderCreation($data);
         } catch (Exception $e) {
+
+            $this->removeOrderQuote();
+
             Mage::dispatchEvent('bseller_skyhub_order_import_exception', [
                 'exception'  => $e,
                 'order_data' => $data,
@@ -59,8 +63,8 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
     {
         $code        = $this->arrayExtract($data, 'code');
         $channel     = $this->arrayExtract($data, 'channel');
-        $orderId = $this->getOrderId($code);
-        $status     = $this->arrayExtract($data, 'status/type');
+        $orderId     = $this->getOrderId($code);
+        $status      = $this->arrayExtract($data, 'status/type');
 
         if ($orderId) {
             /**
@@ -375,7 +379,20 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
         Mage::app()->setCurrentStore($store);
         return $this;
     }
-    
+
+
+    /**
+     * Remove quote in case of order creation exception.
+     *
+     * @return mixed
+     */
+    protected function removeOrderQuote()
+    {
+        /** @var BSeller_SkyHub_Model_Support_Sales_Order_Create $creation */
+        $creation = Mage::getSingleton('bseller_skyhub/support_sales_order_create');
+        return $creation->removeSessionQuote();
+    }
+
     
     /**
      * @return Mage_Core_Model_Store

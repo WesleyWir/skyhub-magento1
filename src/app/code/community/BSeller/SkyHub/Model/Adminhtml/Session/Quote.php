@@ -9,12 +9,19 @@
  *
  * @copyright Copyright (c) 2018 B2W Digital - BSeller Platform. (http://www.bseller.com.br)
  *
+ * @author    Bruno Gemelli <bruno.gemelli@e-smart.com.br>
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
  */
  
 class BSeller_SkyHub_Model_Adminhtml_Session_Quote extends Mage_Adminhtml_Model_Session_Quote
 {
-    
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->clear();
+    }
+
     /**
      * @return $this
      */
