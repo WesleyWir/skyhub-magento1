@@ -30,11 +30,12 @@ trait BSeller_SkyHub_Trait_Catalog_Category
         $ids            = $this->getCategoryPathIds($category, $store);
         $categoryPieces = [];
 
+        $categoryResource = Mage::getResourceSingleton('catalog/category');
         foreach ($ids as $id) {
             $name = $category->getName();
 
             if (!$name || !($id == $category->getId())) {
-                $name = $category->getResource()->getAttributeRawValue($id, 'name', $store);
+                $name = $categoryResource->getAttributeRawValue($id, 'name', $store);
             }
 
             $categoryPieces[] = $name;
