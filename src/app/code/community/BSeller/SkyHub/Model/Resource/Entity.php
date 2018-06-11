@@ -45,6 +45,7 @@ class BSeller_SkyHub_Model_Resource_Entity extends BSeller_Core_Model_Resource_A
                 'store_id'    => (int)    Mage::app()->getStore($storeId)->getId(),
                 'created_at'  => Varien_Date::now(),
                 'updated_at'  => Varien_Date::now(),
+                'integrate'   => 0,
             ]);
             $this->commit();
 
@@ -62,10 +63,11 @@ class BSeller_SkyHub_Model_Resource_Entity extends BSeller_Core_Model_Resource_A
      * @param integer $entityId
      * @param string  $entityType
      * @param int     $storeId
+     * @param int     $integrate
      *
      * @return bool
      */
-    public function updateEntity($entityId, $entityType, $storeId = 0)
+    public function updateEntity($entityId, $entityType, $storeId = 0, $integrate = 0)
     {
         $entityExists = $this->entityExists($entityId, $entityType);
 
@@ -73,9 +75,8 @@ class BSeller_SkyHub_Model_Resource_Entity extends BSeller_Core_Model_Resource_A
             return false;
         }
 
-        $data = array(
-            'updated_at'  => Varien_Date::now(),
-        );
+
+        $data = $this->entityData($integrate);
 
         $where = array(
             'entity_id = ?'     => (int)    $entityId,
@@ -140,4 +141,25 @@ class BSeller_SkyHub_Model_Resource_Entity extends BSeller_Core_Model_Resource_A
         $this->_getWriteAdapter()->query('DELETE FROM '.$this->getMainTable().' WHERE entity_type = "'.$entityType.'"');
         return $this;
     }
+
+    /**
+     * @param int $integrate
+     * @return array
+     */
+    public function entityData($integrate)
+    {
+        if ($integrate) {
+            $data = array(
+                'integrate'   => $integrate,
+            );
+        } else {
+            $data = array(
+                'updated_at'  => Varien_Date::now(),
+                'integrate'   => $integrate,
+            );
+        }
+
+        return $data;
+    }
+
 }

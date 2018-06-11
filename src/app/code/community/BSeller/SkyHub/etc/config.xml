@@ -17,7 +17,7 @@
 <config>
     <modules>
         <BSeller_SkyHub>
-            <version>1.0.0</version>
+            <version>1.2.8</version>
         </BSeller_SkyHub>
     </modules>
     <global>
@@ -105,6 +105,14 @@
                     </bseller_skyhub_integrate_catalog_product>
                 </observers>
             </catalog_product_delete_before>
+            <skyhub_force_entity_integration>
+                <observers>
+                    <bseller_skyhub_force_entity_integration>
+                        <class>bseller_skyhub/observer_catalog_product</class>
+                        <method>integrateProductForce</method>
+                    </bseller_skyhub_force_entity_integration>
+                </observers>
+            </skyhub_force_entity_integration>
             <catalog_category_save_after>
                 <observers>
                     <bseller_skyhub_integrate_catalog_category>
@@ -202,6 +210,22 @@
                     </bs_sales_model_service_quote_submit_success>
                 </observers>
             </sales_model_service_quote_submit_success>
+            <catalog_product_save_commit_after>
+                <observers>
+                    <bs_catalog_product_commit_after>
+                        <class>bseller_skyhub/observer_catalog_product</class>
+                        <method>productCommit</method>
+                    </bs_catalog_product_commit_after>
+                </observers>
+            </catalog_product_save_commit_after>
+            <cataloginventory_stock_item_save_commit_after>
+                <observers>
+                    <bs_cataloginventory_stock_item_save_commit_after>
+                        <class>bseller_skyhub/observer_catalog_product</class>
+                        <method>catalogInventoryCommit</method>
+                    </bs_cataloginventory_stock_item_save_commit_after>
+                </observers>
+            </cataloginventory_stock_item_save_commit_after>
         </events>
         <sales>
             <quote>

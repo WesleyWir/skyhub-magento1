@@ -56,7 +56,7 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Mod
             )
             ->reset('columns')
             ->columns('e.entity_id')
-            ->where('bseller_skyhub_entity.updated_at IS NULL OR e.updated_at >= bseller_skyhub_entity.updated_at')
+            ->where('bseller_skyhub_entity.updated_at IS NULL OR bseller_skyhub_entity.integrate = 1')
             ->order(array('e.updated_at DESC', 'e.created_at DESC'));
 
         /** Set limitation. */

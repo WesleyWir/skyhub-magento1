@@ -107,4 +107,11 @@ trait BSeller_SkyHub_Trait_Entity
         return (bool) $this->getEntityResource()
             ->updateEntity((int) $id, BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT);
     }
+
+
+    public function flagEntityIntegrate($id)
+    {
+        return $this->getEntityResource()
+            ->updateEntity($id, BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT, 0, 1);
+    }
 }
