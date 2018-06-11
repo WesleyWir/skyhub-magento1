@@ -3,6 +3,16 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.2.8] - 2018-06-11
+### Added
+- Added a new column in bseller_skyhub_entity table to force entities integration;
+
+### Changed
+- Solved problem with order creation without SkyHub data;
+- Solved problem with product specifications in case of zero stock quantity;
+- Solved problem with SkyHub entity queue table query;
+
+
 ## [1.2.7] - 2018-05-24
 ### Added
 - Solved problem with order statuses queue which wasn't decreasing magento queue;
